@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strada — Italiaanse broodjes op wielen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --zwart: #161312;
+    --grafiet: #232020;
+    --grafiet-licht: #322d2b;
+    --terracotta: #d8632c;
+    --terracotta-donker: #b14e1e;
+    --olijf: #8a9461;
+    --krijt: #f4efe6;
+    --krijt-dim: #cfc8bc;
+    --line: rgba(244,239,230,0.12);
+    --radius: 4px;
+    --display: "Fraunces", serif;
+    --industrial: "Oswald", sans-serif;
+    --mono: "Space Mono", monospace;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background: var(--zwart);
+    color: var(--krijt);
+    font-family: var(--industrial);
+    font-weight:400;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  img{ display:block; max-width:100%; }
+
+  a{ color:inherit; }
+
+  /* ===== Topbar ===== */
+  header{
+    position:sticky; top:0; z-index:100;
+    background: rgba(22,19,18,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    max-width:1200px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 24px;
+  }
+  .logo{
+    font-family: var(--display);
+    font-weight:600; font-style:italic;
+    font-size:1.6rem;
+    letter-spacing:0.5px;
+    color:var(--krijt);
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo .dot{ color:var(--terracotta); font-style:normal; }
+  .navlinks{ display:flex; gap:32px; list-style:none; }
+  .navlinks a{
+    text-decoration:none; color:var(--krijt-dim);
+    font-size:0.85rem; letter-spacing:2px; text-transform:uppercase;
+    font-weight:500;
+    transition: color .2s;
+    position:relative;
+    padding-bottom:4px;
+  }
+  .navlinks a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0; height:2px;
+    background:var(--terracotta); transition: width .25s;
+  }
+  .navlinks a:hover{ color:var(--krijt); }
+  .navlinks a:hover::after{ width:100%; }
+
+  .nav-cta{
+    background:var(--terracotta); color:var(--zwart);
+    border:none; padding:11px 22px; border-radius:var(--radius);
+    font-family:var(--industrial); font-weight:600; letter-spacing:1.5px;
+    font-size:0.8rem; text-transform:uppercase; text-decoration:none;
+    transition: background .2s, transform .15s;
+  }
+  .nav-cta:hover{ background:var(--krijt); transform:translateY(-1px); }
+
+  .burger{ display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:6px; }
+  .burger span{ width:24px; height:2px; background:var(--krijt); display:block; }
+
+  /* ===== Hero ===== */
+  .hero{
+    position:relative;
+    min-height:92vh;
+    display:flex; align-items:center;
+    overflow:hidden;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero::before{
+    content:'';
+    position:absolute; inset:0;
+    background:
+      linear-gradient(115deg, rgba(22,19,18,0.97) 0%, rgba(22,19,18,0.88) 38%, rgba(22,19,18,0.45) 65%, rgba(22,19,18,0.15) 100%),
+      url('https://images.unsplash.com/photo-1623653387945-2fd25214f8fc?q=80&w=1600&auto=format&fit=crop') center right / cover no-repeat;
+  }
+  .hero-content{
+    position:relative; z-index:2;
+    max-width:1200px; margin:0 auto; padding: 0 24px;
+    width:100%;
+  }
+  .stamp{
+    display:inline-flex; align-items:center; gap:10px;
+    border:1.5px solid var(--terracotta);
+    color:var(--terracotta);
+    font-family:var(--mono);
+    font-size:0.72rem; letter-spacing:3px; text-transform:uppercase;
+    padding:7px 16px; border-radius:30px;
+    transform: rotate(-2deg);
+    margin-bottom:28px;
+  }
+  .stamp::before{ content:'●'; font-size:0.6rem; }
+
+  .hero h1{
+    font-family: var(--display);
+    font-weight:600;
+    font-size: clamp(3rem, 8vw, 6.4rem);
+    line-height:0.98;
+    max-width:780px;
+    letter-spacing:-1px;
+  }
+  .hero h1 em{
+    font-style:italic; color:var(--terracotta);
+    display:block;
+  }
+  .hero p{
+    margin-top:24px; max-width:480px;
+    color:var(--krijt-dim); font-size:1.05rem;
+    font-family:var(--industrial); font-weight:300;
+  }
+  .hero-actions{ margin-top:40px; display:flex; gap:16px; flex-wrap:wrap; }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:16px 30px; border-radius:var(--radius);
+    font-family:var(--industrial); font-weight:600; letter-spacing:1.5px;
+    font-size:0.85rem; text-transform:uppercase; text-decoration:none;
+    border:1.5px solid transparent; cursor:pointer;
+    transition: all .2s;
+  }
+  .btn-primary{ background:var(--terracotta); color:var(--zwart); }
+  .btn-primary:hover{ background:var(--krijt); transform:translateY(-2px); }
+  .btn-outline{ border-color:var(--krijt-dim); color:var(--krijt); background:transparent; }
+  .btn-outline:hover{ border-color:var(--krijt); background:var(--grafiet-licht); }
+
+  .hero-meta{
+    position:absolute; bottom:40px; right:24px; z-index:2;
+    text-align:right; font-family:var(--mono); font-size:0.78rem;
+    color:var(--krijt-dim); letter-spacing:1px;
+    display:none;
+  }
+  @media(min-width:860px){ .hero-meta{ display:block; } }
+  .hero-meta .loc{ color:var(--terracotta); font-weight:700; }
+
+  /* ===== Section generic ===== */
+  section{ padding:96px 24px; max-width:1200px; margin:0 auto; }
+  .section-head{ margin-bottom:56px; }
+  .eyebrow{
+    font-family:var(--mono); font-size:0.78rem; letter-spacing:4px;
+    text-transform:uppercase; color:var(--terracotta); margin-bottom:14px;
+    display:block;
+  }
+  .section-head h2{
+    font-family:var(--display); font-weight:600;
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    letter-spacing:-0.5px;
+  }
+  .section-head p{
+    color:var(--krijt-dim); max-width:560px; margin-top:14px; font-size:1rem;
+  }
+
+  /* ===== Over / impressie ===== */
+  .impressie{
+    background:var(--grafiet);
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  }
+  .impressie-grid{
+    display:grid; grid-template-columns: repeat(4, 1fr); gap:14px;
+    margin-top:8px;
+  }
+  .impressie-grid figure{
+    overflow:hidden; border-radius:var(--radius);
+    aspect-ratio: 1/1.05; position:relative;
+    border:1px solid var(--line);
+  }
+  .impressie-grid figure:first-child{ grid-row: span 2; aspect-ratio:1/2.2; }
+  .impressie-grid img{
+    width:100%; height:100%; object-fit:cover;
+    filter: saturate(0.92) contrast(1.05);
+    transition: transform .5s ease;
+  }
+  .impressie-grid figure:hover img{ transform: scale(1.06); }
+  .impressie-grid figcaption{
+    position:absolute; bottom:0; left:0; right:0;
+    padding:14px 16px;
+    font-family:var(--mono); font-size:0.72rem; letter-spacing:1.5px;
+    text-transform:uppercase; color:var(--krijt);
+    background: linear-gradient(to top, rgba(22,19,18,0.85), transparent);
+  }
+  @media(max-width:860px){
+    .impressie-grid{ grid-template-columns: repeat(2, 1fr); }
+    .impressie-grid figure:first-child{ grid-column: span 2; grid-row: span 1; aspect-ratio:2/1.2; }
+  }
+
+  /* ===== Agenda ===== */
+  .agenda-list{ display:flex; flex-direction:column; }
+  .agenda-item{
+    display:grid; grid-template-columns: 110px 1fr auto;
+    align-items:center; gap:28px;
+    padding:26px 0; border-bottom:1px solid var(--line);
+  }
+  .agenda-item:first-child{ border-top:1px solid var(--line); }
+  .agenda-date{
+    font-family:var(--display); font-style:italic; font-weight:600;
+    line-height:1; color:var(--terracotta);
+  }
+  .agenda-date .day{ font-size:2.6rem; display:block; }
+  .agenda-date .month{ font-family:var(--mono); font-style:normal; font-size:0.8rem; letter-spacing:3px; color:var(--krijt-dim); text-transform:uppercase; }
+  .agenda-info h3{ font-size:1.3rem; font-weight:600; letter-spacing:0.5px; margin-bottom:6px; }
+  .agenda-info p{ color:var(--krijt-dim); font-size:0.92rem; font-family:var(--mono); }
+  .agenda-time{
+    font-family:var(--mono); font-size:0.85rem; color:var(--krijt-dim);
+    text-align:right; white-space:nowrap;
+  }
+  .agenda-time .live{
+    display:inline-flex; align-items:center; gap:8px;
+    color:var(--olijf); font-weight:700; letter-spacing:2px;
+    text-transform:uppercase; font-size:0.72rem;
+  }
+  .agenda-time .live::before{
+    content:''; width:8px; height:8px; border-radius:50%; background:var(--olijf);
+    box-shadow:0 0 0 0 rgba(138,148,97,0.6);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(138,148,97,0.5); }
+    70%{ box-shadow:0 0 0 8px rgba(138,148,97,0); }
+    100%{ box-shadow:0 0 0 0 rgba(138,148,97,0); }
+  }
+  @media(max-width:700px){
+    .agenda-item{ grid-template-columns: 70px 1fr; gap:16px; }
+    .agenda-time{ grid-column: 1 / -1; text-align:left; padding-left:86px; margin-top:-8px; }
+    .agenda-date .day{ font-size:2rem; }
+  }
+
+  /* ===== Assortiment ===== */
+  .menu{ background:var(--grafiet); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .menu-grid{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap:0;
+    border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;
+  }
+  .menu-card{
+    border-right:1px solid var(--line); border-bottom:1px solid var(--line);
+    padding:32px; display:flex; flex-direction:column;
+  }
+  .menu-card:nth-child(3n){ border-right:none; }
+  .menu-card .tag{
+    font-family:var(--mono); font-size:0.68rem; letter-spacing:3px; text-transform:uppercase;
+    color:var(--olijf); margin-bottom:14px;
+  }
+  .menu-card h3{
+    font-family:var(--display); font-weight:600; font-size:1.5rem; margin-bottom:10px;
+    display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+  }
+  .menu-card h3 .prijs{
+    font-family:var(--mono); font-size:1.05rem; color:var(--terracotta); font-weight:700; white-space:nowrap;
+  }
+  .menu-card p{ color:var(--krijt-dim); font-size:0.92rem; flex-grow:1; }
+  .menu-card .origine{
+    margin-top:16px; padding-top:14px; border-top:1px dashed var(--line);
+    font-family:var(--mono); font-size:0.7rem; letter-spacing:1.5px; text-transform:uppercase;
+    color:var(--krijt-dim);
+  }
+  .menu-card .origine span{ color:var(--terracotta); }
+  @media(max-width:860px){
+    .menu-grid{ grid-template-columns: 1fr 1fr; }
+    .menu-card:nth-child(2n){ border-right:none; }
+    .menu-card:nth-child(3n){ border-right:1px solid var(--line); }
+  }
+  @media(max-width:560px){
+    .menu-grid{ grid-template-columns: 1fr; }
+    .menu-card{ border-right:none !important; }
+  }
+
+  .menu-note{
+    margin-top:32px; display:flex; align-items:center; gap:14px;
+    font-family:var(--mono); font-size:0.82rem; color:var(--krijt-dim);
+  }
+  .menu-note .badge{
+    flex-shrink:0;
+    width:46px; height:46px; border-radius:50%;
+    border:1.5px dashed var(--terracotta);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--terracotta); font-family:var(--display); font-style:italic; font-weight:700;
+    transform: rotate(-8deg);
+  }
+
+  /* ===== Boeking ===== */
+  .boeking{ }
+  .boeking-grid{
+    display:grid; grid-template-columns: 1fr 1.1fr; gap:60px; align-items:start;
+  }
+  @media(max-width:900px){ .boeking-grid{ grid-template-columns:1fr; } }
+
+  .boeking-info h3{ font-family:var(--display); font-style:italic; font-weight:600; font-size:1.6rem; margin-bottom:18px; }
+  .boeking-info p{ color:var(--krijt-dim); margin-bottom:18px; font-size:0.95rem; }
+  .boeking-steps{ list-style:none; margin-top:28px; display:flex; flex-direction:column; gap:18px; }
+  .boeking-steps li{ display:flex; gap:16px; align-items:flex-start; }
+  .boeking-steps .num{
+    font-family:var(--display); font-style:italic; font-weight:700; color:var(--terracotta);
+    font-size:1.4rem; line-height:1; flex-shrink:0;
+  }
+  .boeking-steps .txt h4{ font-size:0.95rem; font-weight:600; letter-spacing:0.5px; margin-bottom:4px; }
+  .boeking-steps .txt p{ font-size:0.85rem; color:var(--krijt-dim); margin:0; }
+
+  .boeking-form{
+    background:var(--grafiet); border:1px solid var(--line); border-radius:var(--radius);
+    padding:36px;
+  }
+  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+  @media(max-width:560px){ .form-row{ grid-template-columns:1fr; } }
+  label{
+    display:block; font-family:var(--mono); font-size:0.7rem; letter-spacing:2px;
+    text-transform:uppercase; color:var(--krijt-dim); margin-bottom:8px;
+  }
+  input, select, textarea{
+    width:100%; background:var(--zwart); border:1px solid var(--line);
+    border-radius:var(--radius); padding:13px 14px; color:var(--krijt);
+    font-family:var(--industrial); font-size:0.95rem;
+    transition: border-color .2s;
+  }
+  input:focus, select:focus, textarea:focus{
+    outline:none; border-color:var(--terracotta);
+  }
+  textarea{ resize:vertical; min-height:90px; }
+  .field{ margin-bottom:16px; }
+
+  .pakket-opties{ display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
+  .pakket{
+    display:flex; justify-content:space-between; align-items:center;
+    border:1px solid var(--line); border-radius:var(--radius);
+    padding:14px 16px; cursor:pointer; transition: border-color .2s, background .2s;
+  }
+  .pakket:hover{ border-color:var(--krijt-dim); }
+  .pakket.actief{ border-color:var(--terracotta); background:rgba(216,99,44,0.08); }
+  .pakket input[type="radio"]{ width:auto; accent-color:var(--terracotta); margin-right:12px; }
+  .pakket-naam{ display:flex; align-items:center; font-size:0.92rem; font-weight:500; }
+  .pakket-prijs{ font-family:var(--mono); color:var(--terracotta); font-weight:700; }
+
+  .totaal-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:18px 0; border-top:1px dashed var(--line); margin-top:6px; margin-bottom:22px;
+  }
+  .totaal-row .label{ font-family:var(--mono); font-size:0.78rem; letter-spacing:2px; text-transform:uppercase; color:var(--krijt-dim); }
+  .totaal-row .bedrag{ font-family:var(--display); font-style:italic; font-weight:700; font-size:2rem; color:var(--terracotta); }
+
+  .btn-afrekenen{
+    width:100%; background:var(--olijf); color:var(--zwart);
+    border:none; padding:17px; border-radius:var(--radius);
+    font-family:var(--industrial); font-weight:700; letter-spacing:2px;
+    font-size:0.9rem; text-transform:uppercase; cursor:pointer;
+    transition: background .2s, transform .15s;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+  }
+  .btn-afrekenen:hover{ background:var(--krijt); transform:translateY(-2px); }
+  .btn-afrekenen:disabled{ opacity:0.5; cursor:not-allowed; transform:none; }
+
+  .betaal-note{
+    margin-top:14px; font-family:var(--mono); font-size:0.72rem; color:var(--krijt-dim);
+    text-align:center; line-height:1.6;
+  }
+  .betaal-note img{ display:inline-block; vertical-align:middle; height:14px; margin:0 4px; filter:invert(0.8); }
+
+  .form-status{
+    margin-top:16px; padding:14px; border-radius:var(--radius);
+    font-family:var(--mono); font-size:0.82rem; text-align:center;
+    border:1px dashed var(--olijf); color:var(--olijf); display:none;
+  }
+  .form-status.zichtbaar{ display:block; }
+
+  /* ===== Partner carrousel ===== */
+  .partners{
+    background:var(--grafiet); border-top:1px solid var(--line);
+    padding:80px 0 60px;
+  }
+  .partners .section-head{ max-width:1200px; margin:0 auto 40px; padding:0 24px; }
+  .carrousel{
+    overflow:hidden; position:relative;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  }
+  .carrousel-track{
+    display:flex; gap:20px; width:max-content;
+    animation: schuiven 38s linear infinite;
+  }
+  .carrousel:hover .carrousel-track{ animation-play-state:paused; }
+  @keyframes schuiven{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(-50%); }
+  }
+  .carrousel-item{
+    flex-shrink:0; width:280px; border-radius:var(--radius);
+    overflow:hidden; position:relative; aspect-ratio:4/3;
+    border:1px solid var(--line);
+  }
+  .carrousel-item img{ width:100%; height:100%; object-fit:cover; filter:saturate(0.85); }
+  .carrousel-item .label{
+    position:absolute; bottom:0; left:0; right:0;
+    padding:12px 14px;
+    background:linear-gradient(to top, rgba(22,19,18,0.9), transparent);
+    font-family:var(--mono); font-size:0.7rem; letter-spacing:1.5px; text-transform:uppercase;
+  }
+  .carrousel-item .label .sub{ color:var(--krijt-dim); display:block; font-size:0.65rem; margin-top:2px; }
+
+  /* ===== Footer ===== */
+  footer{
+    border-top:1px solid var(--line);
+    padding:48px 24px; max-width:1200px; margin:0 auto;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:24px;
+    font-family:var(--mono); font-size:0.78rem; color:var(--krijt-dim);
+  }
+  footer .logo{ font-size:1.2rem; margin-bottom:8px; }
+  footer .col h4{ font-family:var(--industrial); letter-spacing:2px; text-transform:uppercase; font-size:0.75rem; color:var(--krijt); margin-bottom:10px; }
+  footer .col p, footer .col a{ display:block; margin-bottom:6px; text-decoration:none; }
+  footer .col a:hover{ color:var(--terracotta); }
+
+  /* ===== Mobile nav ===== */
+  @media(max-width:760px){
+    .navlinks{ display:none; }
+    .nav-cta{ display:none; }
+    .burger{ display:flex; }
+    .navlinks.open{
+      display:flex; flex-direction:column; position:absolute; top:100%; left:0; right:0;
+      background:var(--grafiet); padding:24px; gap:18px; border-bottom:1px solid var(--line);
+    }
+    .navlinks.open .nav-cta{ display:inline-flex; }
+  }
+
+  /* Scroll reveal */
+  .reveal{ opacity:0; transform:translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.show{ opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <div class="logo"><span class="dot">●</span> Strada<span style="font-style:normal; color:var(--krijt-dim); font-size:1rem; margin-left:2px;">.</span></div>
+    <ul class="navlinks" id="navlinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#agenda">Agenda</a></li>
+      <li><a href="#assortiment">Assortiment</a></li>
+      <li><a href="#boeken">Boeken</a></li>
+      <a href="#boeken" class="nav-cta">Boek de truck</a>
+    </ul>
+    <button class="burger" id="burger" aria-label="Menu openen">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- ===== HOME / HERO ===== -->
+<section class="hero" id="home" style="padding-top:0; padding-bottom:0;">
+  <div class="hero-content">
+    <span class="stamp">Diretto dall'Italia</span>
+    <h1>Pizzadeeg.<br>Belegd zoals<br><em>het hoort.</em></h1>
+    <p>Strada bakt verse focaccia en panini van eigen pizzadeeg, gevuld met salami, burrata en groenten die we rechtstreeks uit Italië laten komen. Geen shortcuts, wel een wachtrij.</p>
+    <div class="hero-actions">
+      <a href="#agenda" class="btn btn-primary">Bekijk de agenda</a>
+      <a href="#boeken" class="btn btn-outline">Boek ons voor je event</a>
+    </div>
+  </div>
+  <div class="hero-meta">
+    Vandaag aan het werk in<br>
+    <span class="loc">Heerenveen — Marktplein</span>
+  </div>
+</section>
+
+<!-- ===== IMPRESSIE ===== -->
+<section class="impressie reveal" id="impressie">
+  <div class="section-head">
+    <span class="eyebrow">Een kijkje achter de toonbank</span>
+    <h2>Verse focaccia, live gemaakt.</h2>
+    <p>Elke ochtend kneden we het deeg, snijden we de salami met de hand en wachten de burrata's tot ze in een warm broodje mogen smelten.</p>
+  </div>
+  <div class="impressie-grid">
+    <figure>
+      <img src="https://images.unsplash.com/photo-1610052418439-ee9633e1dc01?q=80&w=900&auto=format&fit=crop" alt="Vers pizzadeeg in de Strada foodtruck">
+      <figcaption>Deeg van vandaag</figcaption>
+    </figure>
+    <figure>
+      <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=900&auto=format&fit=crop" alt="Italiaans broodje met prosciutto en burrata">
+      <figcaption>Prosciutto &amp; burrata</figcaption>
+    </figure>
+    <figure>
+      <img src="https://images.unsplash.com/photo-1559054663-e8d23213f0d3?q=80&w=900&auto=format&fit=crop" alt="Italiaanse ingrediënten op de toonbank">
+      <figcaption>Rechtstreeks uit Italië</figcaption>
+    </figure>
+    <figure>
+      <img src="https://images.unsplash.com/photo-1593504049359-74330189a345?q=80&w=900&auto=format&fit=crop" alt="Foodtruck in actie op straat">
+      <figcaption>Strada on tour</figcaption>
+    </figure>
+    <figure>
+      <img src="https://images.unsplash.com/photo-1571066811602-716837d681de?q=80&w=900&auto=format&fit=crop" alt="Focaccia broodjes in de oven">
+      <figcaption>Vers uit de oven</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ===== AGENDA ===== -->
+<section id="agenda" class="reveal">
+  <div class="section-head">
+    <span class="eyebrow">Waar staan we</span>
+    <h2>De agenda</h2>
+    <p>Strada rijdt rond door Friesland en omstreken. Hieronder vind je waar en wanneer je verse focaccia kunt scoren.</p>
+  </div>
+  <div class="agenda-list">
+    <div class="agenda-item">
+      <div class="agenda-date"><span class="day">15</span><span class="month">Juni</span></div>
+      <div class="agenda-info">
+        <h3>Marktplein, Heerenveen</h3>
+        <p>Weekmarkt — vaste stek op de hoek bij de fontein</p>
+      </div>
+      <div class="agenda-time">
+        <span class="live">Nu open</span><br>11:00 – 17:00
+      </div>
+    </div>
+    <div class="agenda-item">
+      <div class="agenda-date"><span class="day">18</span><span class="month">Juni</span></div>
+      <div class="agenda-info">
+        <h3>Bedrijventerrein De Kuinder, Joure</h3>
+        <p>Lunchpop-up voor kantoorpersoneel — vrije inloop</p>
+      </div>
+      <div class="agenda-time">12:00 – 14:00</div>
+    </div>
+    <div class="agenda-item">
+      <div class="agenda-date"><span class="day">21</span><span class="month">Juni</span></div>
+      <div class="agenda-info">
+        <h3>Strandfestival De Pollen, Sneek</h3>
+        <p>Foodtruckplein, naast het hoofdpodium</p>
+      </div>
+      <div class="agenda-time">15:00 – 22:00</div>
+    </div>
+    <div class="agenda-item">
+      <div class="agenda-date"><span class="day">27</span><span class="month">Juni</span></div>
+      <div class="agenda-info">
+        <h3>Theaterplein, Drachten</h3>
+        <p>Avondmarkt — live muziek &amp; lokale kramen</p>
+      </div>
+      <div class="agenda-time">17:00 – 22:00</div>
+    </div>
+    <div class="agenda-item">
+      <div class="agenda-date"><span class="day">04</span><span class="month">Juli</span></div>
+      <div class="agenda-info">
+        <h3>Park Sonsbeek, Arnhem</h3>
+        <p>Foodtruckfestival — meerdaags evenement</p>
+      </div>
+      <div class="agenda-time">12:00 – 21:00</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ASSORTIMENT ===== -->
+<section class="menu reveal" id="assortiment">
+  <div class="section-head">
+    <span class="eyebrow">Het assortiment</span>
+    <h2>Broodjes met een paspoort</h2>
+    <p>Alle broodjes worden gemaakt van vers gerezen pizzadeeg en op bestelling warm geperst. Ingrediënten rechtstreeks geïmporteerd uit Campania, Emilia-Romagna en Calabrië.</p>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-card">
+      <span class="tag">Klassieker</span>
+      <h3>La Napoletana <span class="prijs">€ 7,50</span></h3>
+      <p>Mortadella, pistache, burrata en een vleugje citroenschil op warme focaccia.</p>
+      <div class="origine">Mortadella di Bologna <span>IGP</span></div>
+    </div>
+    <div class="menu-card">
+      <span class="tag">Favoriet</span>
+      <h3>Il Crudo <span class="prijs">€ 8,00</span></h3>
+      <p>18 maanden gerijpte prosciutto crudo, rucola, parmezaan en truffelmayonaise.</p>
+      <div class="origine">Prosciutto di Parma <span>DOP</span></div>
+    </div>
+    <div class="menu-card">
+      <span class="tag">Vegetarisch</span>
+      <h3>Il Verde <span class="prijs">€ 7,00</span></h3>
+      <p>Grilled courgette, aubergine, burrata, basilicumpesto en gedroogde tomaat.</p>
+      <div class="origine">Burrata uit Puglia</div>
+    </div>
+    <div class="menu-card">
+      <span class="tag">Pittig</span>
+      <h3>La Calabrese <span class="prijs">€ 8,00</span></h3>
+      <p>Spianata calabrese, scamorza affumicata, honing en chiliflakes.</p>
+      <div class="origine">'Nduja uit Calabrië <span>op aanvraag</span></div>
+    </div>
+    <div class="menu-card">
+      <span class="tag">Bijgerecht</span>
+      <h3>Patatine al Rosmarino <span class="prijs">€ 4,00</span></h3>
+      <p>Krokante aardappelpartjes met rozemarijn, zeezout en parmezaan.</p>
+      <div class="origine">Vers gesneden</div>
+    </div>
+    <div class="menu-card">
+      <span class="tag">Drinken</span>
+      <h3>Chinotto / San Pellegrino <span class="prijs">€ 3,00</span></h3>
+      <p>Italiaanse frisdrank — bitterzoete chinotto of citrus-bruisuit Milaan.</p>
+      <div class="origine">Geïmporteerd</div>
+    </div>
+  </div>
+  <div class="menu-note">
+    <div class="badge">v/g</div>
+    <p>Vegetarische en glutenvrije opties op aanvraag beschikbaar — vraag het ons aan de truck. Het assortiment kan per locatie licht afwijken.</p>
+  </div>
+</section>
+
+<!-- ===== BOEKING ===== -->
+<section id="boeken" class="reveal">
+  <div class="section-head">
+    <span class="eyebrow">Strada op jouw event</span>
+    <h2>Boek de truck</h2>
+    <p>Voor bedrijfsfeesten, bruiloften en festivals komen we graag langs. Kies een pakket, vul je gegevens in en reken direct af met Tikkie.</p>
+  </div>
+  <div class="boeking-grid">
+    <div class="boeking-info">
+      <h3>Hoe het werkt</h3>
+      <ul class="boeking-steps">
+        <li>
+          <span class="num">01</span>
+          <div class="txt">
+            <h4>Kies je pakket</h4>
+            <p>Drie vaste opties, of neem contact op voor een offerte op maat bij grote groepen.</p>
+          </div>
+        </li>
+        <li>
+          <span class="num">02</span>
+          <div class="txt">
+            <h4>Vul datum &amp; locatie in</h4>
+            <p>We bevestigen binnen 24 uur of de gevraagde datum beschikbaar is.</p>
+          </div>
+        </li>
+        <li>
+          <span class="num">03</span>
+          <div class="txt">
+            <h4>Reken de aanbetaling af</h4>
+            <p>Via Tikkie betaal je direct een aanbetaling van 25% om je datum vast te leggen. Het restant rekenen we op de dag zelf af.</p>
+          </div>
+        </li>
+        <li>
+          <span class="num">04</span>
+          <div class="txt">
+            <h4>Wij rijden voor</h4>
+            <p>Wij regelen alles: stroom, opbouw en afbraak. Jij hoeft alleen nog te eten.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <form class="boeking-form" id="boekingForm">
+      <div class="form-row">
+        <div class="field">
+          <label for="naam">Naam</label>
+          <input type="text" id="naam" name="naam" required placeholder="Voor- en achternaam">
+        </div>
+        <div class="field">
+          <label for="email">E-mailadres</label>
+          <input type="email" id="email" name="email" required placeholder="jij@voorbeeld.nl">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="datum">Gewenste datum</label>
+          <input type="date" id="datum" name="datum" required>
+        </div>
+        <div class="field">
+          <label for="gasten">Aantal gasten</label>
+          <input type="number" id="gasten" name="gasten" min="10" placeholder="bijv. 60" required>
+        </div>
+      </div>
+      <div class="field">
+        <label for="locatie">Locatie / adres</label>
+        <input type="text" id="locatie" name="locatie" required placeholder="Straat, plaats">
+      </div>
+
+      <label style="margin-top:10px;">Pakket</label>
+      <div class="pakket-opties" id="pakketOpties">
+        <label class="pakket actief">
+          <span class="pakket-naam"><input type="radio" name="pakket" value="295" data-naam="Klein (tot 40 pers.)" checked> Klein — tot 40 personen</span>
+          <span class="pakket-prijs">€ 295</span>
+        </label>
+        <label class="pakket">
+          <span class="pakket-naam"><input type="radio" name="pakket" value="495" data-naam="Middel (tot 80 pers.)"> Middel — tot 80 personen</span>
+          <span class="pakket-prijs">€ 495</span>
+        </label>
+        <label class="pakket">
+          <span class="pakket-naam"><input type="radio" name="pakket" value="795" data-naam="Groot (tot 150 pers.)"> Groot — tot 150 personen</span>
+          <span class="pakket-prijs">€ 795</span>
+        </label>
+      </div>
+
+      <div class="field">
+        <label for="opmerking">Opmerkingen (optioneel)</label>
+        <textarea id="opmerking" name="opmerking" placeholder="Vertel ons iets over je event, dieetwensen, gewenste begin- en eindtijd..."></textarea>
+      </div>
+
+      <div class="totaal-row">
+        <div>
+          <div class="label">Aanbetaling nu (25%)</div>
+        </div>
+        <div class="bedrag" id="bedragAanbetaling">€ 73,75</div>
+      </div>
+
+      <button type="submit" class="btn-afrekenen" id="afrekenBtn">
+        Afrekenen met Tikkie
+      </button>
+      <p class="betaal-note">
+        Je wordt na het versturen doorgestuurd naar Tikkie om de aanbetaling te voltooien.<br>
+        Restantbedrag (incl. eventuele extra's) wordt op locatie afgerekend.
+      </p>
+      <div class="form-status" id="formStatus"></div>
+    </form>
+  </div>
+</section>
+
+<!-- ===== PARTNERS / LOCATIES CARROUSEL ===== -->
+<section class="partners reveal" id="partners">
+  <div class="section-head">
+    <span class="eyebrow">Met dank aan</span>
+    <h2>Partners &amp; plekken waar we stonden</h2>
+  </div>
+  <div class="carrousel">
+    <div class="carrousel-track" id="carrouselTrack">
+      <div class="carrousel-item">
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=600&auto=format&fit=crop" alt="Weekmarkt Heerenveen">
+        <div class="label">Weekmarkt<span class="sub">Heerenveen</span></div>
+      </div>
+      <div class="carrousel-item">
+        <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=600&auto=format&fit=crop" alt="Strandfestival De Pollen">
+        <div class="label">Strandfestival De Pollen<span class="sub">Sneek</span></div>
+      </div>
+      <div class="carrousel-item">
+        <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=600&auto=format&fit=crop" alt="Bierbrouwerij De Brouwerie">
+        <div class="label">Brouwerij De Brouwerie<span class="sub">Partner</span></div>
+      </div>
+      <div class="carrousel-item">
+        <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=600&auto=format&fit=crop" alt="Theaterplein Drachten">
+        <div class="label">Theaterplein<span class="sub">Drachten</span></div>
+      </div>
+      <div class="carrousel-item">
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=600&auto=format&fit=crop" alt="Weekmarkt Heerenveen">
+        <div class="label">Weekmarkt<span class="sub">Heerenveen</span></div>
+      </div>
+      <div class="carrousel-item">
+        <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=600&auto=format&fit=crop" alt="Strandfestival De Pollen">
+        <div class="label">Strandfestival De Pollen<span class="sub">Sneek</span></div>
+      </div>
+      <div class="carrousel-item">
+        <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=600&auto=format&fit=crop" alt="Bierbrouwerij De Brouwerie">
+        <div class="label">Brouwerij De Brouwerie<span class="sub">Partner</span></div>
+      </div>
+      <div class="carrousel-item">
+        <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=600&auto=format&fit=crop" alt="Theaterplein Drachten">
+        <div class="label">Theaterplein<span class="sub">Drachten</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="col">
+    <div class="logo">● Strada.</div>
+    <p>Italiaanse broodjes van vers pizzadeeg.<br>Onderweg door Nederland.</p>
+  </div>
+  <div class="col">
+    <h4>Snel naar</h4>
+    <a href="#agenda">Agenda</a>
+    <a href="#assortiment">Assortiment</a>
+    <a href="#boeken">Boek de truck</a>
+  </div>
+  <div class="col">
+    <h4>Contact</h4>
+    <p>info@strada-foodtruck.nl</p>
+    <p>+31 6 00 00 00 00</p>
+    <p>@strada.foodtruck</p>
+  </div>
+</footer>
+
+<script>
+  // Mobiel menu
+  const burger = document.getElementById('burger');
+  const navlinks = document.getElementById('navlinks');
+  burger.addEventListener('click', () => navlinks.classList.toggle('open'));
+  navlinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navlinks.classList.remove('open')));
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('show'); });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => obs.observe(el));
+
+  // Pakket selectie + bedrag berekenen
+  const pakketten = document.querySelectorAll('.pakket');
+  const bedragEl = document.getElementById('bedragAanbetaling');
+
+  function updateBedrag(){
+    const gekozen = document.querySelector('input[name="pakket"]:checked');
+    const prijs = parseFloat(gekozen.value);
+    const aanbetaling = (prijs * 0.25).toFixed(2).replace('.', ',');
+    bedragEl.textContent = '€ ' + aanbetaling;
+
+    pakketten.forEach(p => p.classList.remove('actief'));
+    gekozen.closest('.pakket').classList.add('actief');
+  }
+  pakketten.forEach(p => {
+    p.addEventListener('click', () => {
+      p.querySelector('input[type="radio"]').checked = true;
+      updateBedrag();
+    });
+  });
+  updateBedrag();
+
+  // ====================================================================
+  // BOEKINGSFORMULIER -> TIKKIE
+  //
+  // Tikkie heeft geen publieke "checkout"-API voor losse websites; Tikkie-
+  // betaalverzoeken maak je aan via de Tikkie for Business app/koppeling.
+  // Twee manieren om dit live te zetten:
+  //
+  // 1) SNEL & HANDMATIG (geen techniek nodig):
+  //    Maak per pakket een vast Tikkie-betaalverzoek aan in de Tikkie-app
+  //    (Tikkie for Business) en plak de gegenereerde link hieronder in
+  //    TIKKIE_LINKS. De klant wordt na het versturen van het formulier
+  //    direct doorgestuurd naar dat Tikkie-verzoek om te betalen.
+  //
+  // 2) AUTOMATISCH PER BOEKING (techniek nodig):
+  //    Vraag toegang aan tot de ABN AMRO / Tikkie API (zakelijke rekening
+  //    vereist). Vervang de fetch-call hieronder door een aanroep naar je
+  //    eigen server, die op zijn beurt een Tikkie-betaalverzoek aanmaakt
+  //    met het exacte aanbetalingsbedrag en de betaal-URL teruggeeft.
+  // ====================================================================
+
+  const TIKKIE_LINKS = {
+    "295": "https://tikkie.me/pay/VERVANG_MET_JOUW_TIKKIE_LINK_KLEIN",
+    "495": "https://tikkie.me/pay/VERVANG_MET_JOUW_TIKKIE_LINK_MIDDEL",
+    "795": "https://tikkie.me/pay/VERVANG_MET_JOUW_TIKKIE_LINK_GROOT"
+  };
+
+  const form = document.getElementById('boekingForm');
+  const status = document.getElementById('formStatus');
+  const afrekenBtn = document.getElementById('afrekenBtn');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const data = new FormData(form);
+    const pakketWaarde = data.get('pakket');
+    const tikkieLink = TIKKIE_LINKS[pakketWaarde];
+
+    // Hier zou je normaal eerst de boekingsgegevens naar je eigen
+    // backend / e-mailadres sturen (bijv. via Formspree, EmailJS of een
+    // eigen server), zodat je de aanvraag ook ontvangt.
+    //
+    // Voorbeeld met een service als Formspree (uncomment en vul aan):
+    //
+    // fetch('https://formspree.io/f/JOUW_FORM_ID', {
+    //   method: 'POST',
+    //   headers: { 'Accept': 'application/json' },
+    //   body: data
+    // });
+
+    status.textContent = 'Bedankt! Je aanvraag is ontvangen. Je wordt nu doorgestuurd naar Tikkie om de aanbetaling te voltooien...';
+    status.classList.add('zichtbaar');
+    afrekenBtn.disabled = true;
+    afrekenBtn.textContent = 'Een moment...';
+
+    setTimeout(() => {
+      if (tikkieLink && !tikkieLink.includes('VERVANG_MET')) {
+        window.open(tikkieLink, '_blank');
+      } else {
+        status.textContent = 'Let op: er is nog geen Tikkie-link ingesteld voor dit pakket. Vervang TIKKIE_LINKS in de code door je eigen Tikkie-betaalverzoeken.';
+      }
+      afrekenBtn.disabled = false;
+      afrekenBtn.textContent = 'Afrekenen met Tikkie';
+    }, 1200);
+  });
+</script>
+
+</body>
+</html>
